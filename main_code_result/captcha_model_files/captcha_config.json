@@ -1,0 +1,10 @@
+{
+  "charset": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+  "num_classes": 62,
+  "captcha_len": 6,
+  "img_w": 200,
+  "img_h": 60,
+  "char_h": 64,
+  "char_w": 32,
+  "best_val_acc": 0.9449932209955453
+}
