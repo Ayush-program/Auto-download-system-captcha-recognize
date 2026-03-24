@@ -1,6 +1,8 @@
 import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 def open_tender_site(driver, url, ocr):
@@ -19,9 +21,7 @@ def open_tender_site(driver, url, ocr):
         print("Dropdown selection error:", e)
 
     while True:
-
         try:
-
             # find captcha image
             captcha = driver.find_element(By.ID, "captchaImage")
 
@@ -38,20 +38,18 @@ def open_tender_site(driver, url, ocr):
             captcha_box = driver.find_element(By.ID, "captchaText")
             captcha_box.clear()
             captcha_box.send_keys(captcha_text)
-
+            
             # click search
             driver.find_element(By.ID, "Search").click()
 
-            # wait for table loading
-            time.sleep(5)
-
-            # check if result table appears
-            tables = driver.find_elements(By.TAG_NAME, "table")
-
-            if len(tables) > 0:
+            # wait for result table with id "tabList"
+            try:
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "tabList"))
+                )
                 print("✔ Result table loaded")
                 break
-            else:
+            except TimeoutException:
                 print("❌ CAPTCHA incorrect → retry")
 
         except Exception as e:
